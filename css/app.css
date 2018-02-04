@@ -1,0 +1,183 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Coda', cursive;
+}
+
+.container {
+    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+}
+
+/*
+ * Styles for the deck of cards
+ */
+
+.deck {
+    width: 660px;
+    min-height: 680px;
+    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 3em;
+}
+
+.deck .card {
+    height: 125px;
+    width: 125px;
+    background: #2e3d49;
+    font-size: 0;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+}
+
+.deck .card.open {
+    transform: rotateY(0);
+    background: #02b3e4;
+    cursor: default;
+}
+
+.deck .card.show {
+    font-size: 33px;
+}
+
+.deck .card.mismatch {
+    background: #ff4500;
+    font-size: 33px;
+}
+
+.deck .card.match {
+    cursor: default;
+    background: #02ccba;
+    font-size: 33px;
+}
+
+/*
+ * Styles for the Score Panel
+ */
+
+.score-panel {
+    text-align: left;
+    width: 596px;
+    margin-bottom: 10px;
+}
+
+.score-panel .stars {
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.score-panel .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
+.score-panel .move-time {
+    float: left;
+    width: 531px;
+    text-align: center;
+}
+
+.score-panel .restart {
+    float: left;
+    cursor: pointer;
+}
+
+.blur {
+    -webkit-filter: blur(3px);
+    -moz-filter: blur(3px);
+    -o-filter: blur(3px);
+    -ms-filter: blur(3px);
+    filter: blur(3px);
+}
+
+/*
+ * Styles for the Modal
+ */
+
+.modal {
+    background-color: rgba(0,0,0,0.4);
+    display: none;
+    font-family: 'Open Sans', sans-serif;
+    padding-top: 160px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    z-index: 3;
+}
+
+.modal .modal-content {
+    width: 55%;
+    background: #fff;
+    border-radius: 10px;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 32px;
+    text-align: center;
+}
+
+.modal .modal-content h2 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.modal .modal-content .fa-check {
+    color: yellowgreen;
+    font-size: 24px;
+    line-height: 24px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+}
+
+.modal .modal-content span {
+    font-weight: 700;
+}
+
+.modal .modal-content button {
+    background: #02ccba;
+    border: 1px solid #02ccba;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 5px 15px;
+}
