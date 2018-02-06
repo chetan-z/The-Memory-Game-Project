@@ -1,9 +1,7 @@
-/*
- * Create a list that holds all of your cards
- */
 'use strict';
 
-var cardList, cardId, cardOpen, cardFlipCount, moves, stars, starsCount, time, timeIncrease, timeRun;
+/* Create a list that holds all of the cards */
+let cardList, cardId, cardOpen, cardFlipCount, moves, stars, starsCount, time, timeIncrease, timeRun;
 
 cardList = ['anchor', 'anchor', 'bicycle', 'bicycle', 'bolt', 'bolt', 'bomb', 'bomb', 'cube', 'cube', 'diamond', 'diamond', 'leaf', 'leaf', 'paper-plane-o', 'paper-plane-o'];
 cardId = [];
@@ -11,12 +9,7 @@ cardOpen = [];
 
 init();
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+/* Shuffle the list of cards using the provided "shuffle" method below */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -33,17 +26,7 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
+/* A function to start or reset the game board, the moves, the timer, and the star rating */
 function init() {
     cardFlipCount = 0;
     moves = 0;
@@ -56,6 +39,7 @@ function init() {
 
     timeReset();
 
+    // Loop through each card and create its HTML
     var displayCard = '';
     shuffle(cardList);
     for (var i = 0; i < cardList.length; i++) {
@@ -63,27 +47,35 @@ function init() {
         displayCard += '<li id="card-' + createCardId + '" class="card" onclick="flipCard(this,\'' + cardList[i] + '\')"></li>';
     }
     
+    // Add each card's HTML to the page
     document.querySelector('.deck').innerHTML = displayCard;
+
+    // Hide modal
     document.querySelector('.modal').style.display = 'none';
     document.querySelector('.container').classList.remove('blur');
 }
 
+/* Set up the event listener for a card when it is clicked */
 function flipCard(card, symbol) {
     if (card.innerHTML === '' && cardOpen.length < 2) {
+
         card.classList.add('open', 'show', 'animated', 'flipInY');
         card.innerHTML = '<i class="fa fa-' + symbol + '"></i>';
 
+        // Add the FIRST opened card to the 'cardOpen' and 'cardId' arrays
         if (cardOpen.length === 0) {
             cardOpen.push(symbol);
             cardId.push(card.id);
-
         } else if (cardOpen.length === 1) {
+
+            // Add the SECOND opened card to the 'cardOpen' and 'cardId' arrays
             cardOpen.push(symbol);
             cardId.push(card.id);
 
             var cardOne = document.getElementById(cardId[0]);
             var cardTwo = document.getElementById(cardId[1]);
 
+            // If both FIRST and SECOND opened cards MATCH
             if (cardOpen[0] === cardOpen[1]) {
                 cardFlipCount += 2;
                 
@@ -93,14 +85,20 @@ function flipCard(card, symbol) {
                 cardOne.classList.remove('open', 'show', 'flipInY');
                 cardTwo.classList.remove('open', 'show', 'flipInY');
                 
+                // Increase move count by 1
                 moves++;
                 document.querySelector('.moves').textContent = moves;
                 starsRating(moves);
+
+                // Empty the arrays and make them ready for next open cards
                 cardOpen = [];
                 cardId = [];
                 
+                // When all cards are matched
                 if (cardFlipCount === cardList.length) {
                     timeStop();
+
+                    // Congratulations Popup
                     setTimeout(function() {
                         document.querySelector('.modal').style.display = 'block';
                         document.querySelector('.container').classList.add('blur');
@@ -111,6 +109,8 @@ function flipCard(card, symbol) {
                     document.querySelector('.play-again').addEventListener('click', init);
                 }
             } else {
+
+                // If both FIRST and SECOND opened cards DO NOT MATCH
                 cardOne.classList.add('shake', 'mismatch');
                 cardTwo.classList.add('shake', 'mismatch');
 
@@ -124,9 +124,12 @@ function flipCard(card, symbol) {
                     cardTwo.innerHTML = '';
                 }, 500);
 
+                // Increase move count by 1
                 moves++;
                 document.querySelector('.moves').textContent = moves;
                 starsRating(moves);
+
+                // Empty the arrays and make them ready for next open cards
                 cardOpen = [];
                 cardId = [];
             }
@@ -134,18 +137,18 @@ function flipCard(card, symbol) {
     }
 }
 
-// Star check
+/* Star Rating: Change star rating after some number of moves */
 function starsRating(moves) {
-    var starsRemain = '3 stars';
-    if (moves >= 10 && moves < 16) {
+    var starsRemain;
+
+    if (moves <= 10) {
+        starsRemain = '3 stars';
+    } else if (moves > 10 && moves < 16) {
         starsCount[2].innerHTML = '<i class="fa fa-star-o"></i>';
         starsRemain = '2 stars';
-    } else if (moves >= 16 && moves < 22) {
+    } else if (moves >= 16) {
         starsCount[1].innerHTML = '<i class="fa fa-star-o"></i>';
         starsRemain = '1 star';
-    } else if (moves >= 22) {
-        starsCount[0].innerHTML = '<i class="fa fa-star-o"></i>';
-        starsRemain = '0 star';
     }
 
     return { starsNumber: starsRemain };
@@ -157,7 +160,7 @@ function starsReset() {
     }
 }
 
-// Time check
+/* Timer: Display time when the game starts */
 function timeCount(s) {
     var sec = s % 60;
     var min = Math.floor(s / 60);
@@ -195,4 +198,5 @@ function timeReset() {
     timeRun = setInterval(timeStart, 1000);
 }
 
+/* Restart Button */
 document.querySelector('.restart').addEventListener('click', init);
